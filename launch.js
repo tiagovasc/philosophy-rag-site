@@ -87,7 +87,7 @@
       if (changed) {
         tab = record.mode === 'search' ? 'passages' : 'answer';
         $('question').value = record.question;
-        populateOptions({...record.options, rag_count: Math.min(30, record.options.rag_count), answer_count: Math.min(10, record.options.answer_count), model: 'gpt-6.1-sol', effort: 'low'});
+        populateOptions({...record.options, rag_count: Math.min(30, record.options.rag_count), answer_count: Math.min(10, record.options.answer_count, record.options.rag_count), model: 'gpt-6.1-sol', effort: 'low'});
         $('rating-filter').value = 'all';
       }
       $('question-count').textContent = `${$('question').value.length.toLocaleString()} / 1,200`;
