@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Philosophy — grounded in SEP &amp; IEP</title><link rel="stylesheet" href="./styles.css?v=8264538767d1"><script src="./config.js?v=1afbfc3e20f3"></script><script src="./app.js?v=f1584ebc490a" defer></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Explore philosophy with source-grounded answers and exact passages from the Stanford and Internet Encyclopedias of Philosophy."><meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39;; script-src &#39;self&#39;; style-src &#39;self&#39;; connect-src &#39;self&#39; https://philosophy-api-production.up.railway.app; img-src &#39;self&#39; data:; object-src &#39;none&#39;; base-uri &#39;self&#39;; form-action &#39;self&#39;; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="icon" href="./favicon.svg?v=07c00e713dd8"><link rel="stylesheet" href="./launch.css?v=fbeb87aef235"><title>Philosophy — grounded in SEP &amp; IEP</title><link rel="stylesheet" href="./styles.css?v=8264538767d1"><script src="./config.js?v=1afbfc3e20f3"></script><script src="./app.js?v=f1584ebc490a" defer></script><script src="./launch.js?v=b28fa7dc6892" defer></script></head>
 <body>
 <aside class="sidebar" aria-label="Research library">
   <a class="brand" href="./" aria-label="Philosophy home"><span class="brand-mark">φ</span><span>philosophy<span class="brand-sub">a place to think</span></span></a>
@@ -19,19 +19,19 @@
   </section>
   <section class="composer" aria-label="Ask a philosophy question">
     <form id="ask-form"><div class="corpus-control"><label for="corpus-selection">Read from <select id="corpus-selection"><option value="SEP">Stanford Encyclopedia (SEP)</option><option value="IEP">Internet Encyclopedia (IEP)</option></select></label><span>One encyclopedia per inquiry</span></div>
-      <label for="question" class="sr-only">Your philosophy question</label><textarea id="question" placeholder="What would you like to understand?" maxlength="3000" rows="3" required></textarea>
-      <div class="composer-bottom"><button type="button" id="settings-button" class="quiet-button" aria-expanded="false">⚙ Research settings</button><div class="submit-actions"><button type="button" id="search-button" class="search-button">Find passages</button><button type="submit" id="research-button" class="primary">Explore question <span>↗</span></button></div></div>
+      <label for="question" class="sr-only">Your philosophy question</label><textarea id="question" placeholder="What would you like to understand?" maxlength="1200" aria-describedby="allowance question-count" rows="3" required></textarea>
+      <div class="composer-bottom"><button type="button" id="settings-button" class="quiet-button" aria-expanded="false">⚙ Evidence settings</button><div class="submit-actions"><button type="button" id="search-button" class="search-button">Find passages</button><button type="submit" id="research-button" class="primary">Explore question <span>↗</span></button></div></div>
       <div id="settings" class="settings" hidden>
-        <label>Passages to retrieve<input id="rag-count" type="number" min="1" max="300" value="100"></label>
+        <label>Passages to retrieve<input id="rag-count" type="number" min="1" max="30" value="20"></label>
         <label>Evidence for the answer<select id="selection"><option value="perfect">Perfectly relevant only</option><option value="very" selected>+ Very relevant</option><option value="relevant">+ Relevant</option><option value="number">Custom passage count</option></select></label>
-        <label id="answer-count-label" hidden>Passages for the answer<input id="answer-count" type="number" min="1" max="300" value="20"></label>
-        <label>Answer model<select id="model"><option value="gpt-6.1-sol">GPT-6.1 Sol</option><option value="gpt-6-astra">GPT-6 Astra</option></select></label>
-        <label>Thinking level<select id="effort"><option>low</option><option>medium</option><option>high</option><option>xhigh</option><option>max</option><option>ultra</option></select></label>
-        <p>Rating choices are cumulative. “+ Very relevant” includes Perfectly relevant and Very relevant passages. Custom count takes the best-rated passages, even if their ratings are lower.</p>
+        <label id="answer-count-label" hidden>Passages for the answer<input id="answer-count" type="number" min="1" max="10" value="10"></label>
+        <input id="model" type="hidden" value="gpt-6.1-sol">
+        <input id="effort" type="hidden" value="low">
+        <p>Choose how closely the passages should match your question. Answers use up to 10 whole passages. Wider searches may take longer.</p>
       </div>
-    </form>
+    <div class="honeypot" aria-hidden="true"><label>Website<input id="website-check" name="website" tabindex="-1" autocomplete="off"></label></div><div class="allowance-row"><span id="allowance" role="status" aria-live="polite">Checking today’s allowance…</span><span id="question-count">0 / 1,200</span></div></form>
     <p class="composer-note">Answers draw from your selected encyclopedia snapshot. <span>Every claim leads back to a passage.</span></p>
-  </section>
+  <p class="allowance-hint">No account needed. Daily limits also apply to shared networks and reset at midnight UTC.</p></section>
   <div id="alert" role="alert" hidden></div>
   <section id="suggestions" class="suggestions"><div class="section-kicker">A FEW PLACES TO BEGIN</div><div class="suggestion-grid">
     <button data-question="What is the difference between compatibilism and libertarianism about free will?"><span class="suggestion-icon">↗</span><strong>Are we free?</strong><span>Free will, determinism, and the choices we make.</span><span class="suggestion-arrow">↗</span></button>
@@ -40,15 +40,15 @@
   </div></section>
   <section id="research" hidden aria-label="Research results">
     <div id="progress" class="progress" aria-live="polite"></div>
-    <div class="result-heading"><h2 id="result-question"></h2><button id="copy-button" class="quiet-button" hidden>Copy answer</button></div>
+    <div class="result-heading"><h2 id="result-question"></h2><div class="result-actions"><button id="copy-button" class="quiet-button" hidden>Copy answer</button><button id="download-answer" class="quiet-button" hidden>Save Markdown</button></div></div>
     <div id="result-meta" class="result-meta"></div>
     <div class="tabs" role="tablist" aria-label="Research views"><button id="answer-tab" role="tab" aria-selected="true">Answer</button><button id="passages-tab" role="tab" aria-selected="false">Passages <span id="passage-count"></span></button><button id="method-tab" role="tab" aria-selected="false">Research trail</button></div>
     <div id="answer-view" class="answer-layout"><article id="answer" class="prose" aria-label="Research answer"></article><aside id="sources" class="source-rail" aria-label="Sources used"></aside></div>
     <section id="passages-view" hidden><div class="passage-controls"><label for="rating-filter">Show</label><select id="rating-filter"><option value="all">All retrieved passages</option><option value="selected">Used for the answer</option><option value="4">Perfectly relevant</option><option value="3">Very relevant</option><option value="2">Relevant</option><option value="1">A little relevant</option><option value="0">Not relevant</option></select><span id="passage-summary"></span></div><div id="passages"></div></section>
     <section id="method-view" class="method-view" hidden></section>
   </section>
-  <footer><span id="corpus-count">Loading the encyclopedia snapshots…</span><span>Independent research tool · SEP & IEP snapshots</span></footer>
+  <footer><span id="corpus-count">Loading the encyclopedia snapshots…</span><span class="footer-links"><span>Independent tool · SEP & IEP snapshots</span><button id="privacy-button" type="button">Privacy &amp; usage</button></span></footer>
 </main>
 <dialog id="source-dialog"><div class="dialog-top"><span>READ THE SOURCE</span><button id="close-source" aria-label="Close source">×</button></div><div id="source-content"></div></dialog>
 <dialog id="about-dialog"><div class="dialog-top"><span>A QUESTION, WITH A TRACEABLE ANSWER</span><button id="close-about" aria-label="Close explanation">×</button></div><h2>From question to understanding.</h2><ol class="about-steps"><li><strong>Find the passages.</strong><p>Your question is compared with the selected encyclopedia’s passage embeddings.</p></li><li><strong>Check relevance.</strong><p>Jev rates each passage against your exact question, from Not relevant to Perfectly relevant.</p></li><li><strong>Choose the evidence.</strong><p>Your rating threshold or custom count decides which passages reach the answer model.</p></li><li><strong>Read, then verify.</strong><p>The answer cites individual passages. Open a citation to read the saved passage, nearby context, and its original encyclopedia link.</p></li></ol><p class="about-note">Find passages stops after retrieval. Explore question also runs Jev and the answer model. Questions and research trails are saved online in your browser’s private library. This is an independent tool, not an official SEP or IEP service.</p></dialog>
-</body></html>
+<dialog id="privacy-dialog" aria-labelledby="privacy-title"><div class="dialog-top"><span>PRIVACY &amp; FAIR USE</span><button id="close-privacy" aria-label="Close privacy information">×</button></div><div class="privacy-copy"><h2 id="privacy-title">Simple, without an account.</h2><h3>Your inquiry library</h3><p>Questions, evidence and answers are saved online for this browser’s random library identifier. Anyone using this browser can view its library. Clearing browser storage loses access to that library; it does not erase the saved server records. Avoid sharing sensitive personal information in questions.</p><h3>Keeping the room available</h3><p>Daily limits apply to your browser, your shared network and the whole room. The app stores daily protected network fingerprints and usage counts to enforce these limits, rather than full IP addresses. Network changes and privacy tools may affect your allowance. Failed or interrupted research can still consume an allowance because processing may already have started. Reopening a completed saved inquiry does not spend another allowance.</p><h3>Processing and sources</h3><p>Railway runs the service and Supabase stores the inquiry library. Answer requests send your question and selected encyclopedia passages to Jev for relevance checks and to OpenAI for synthesis. Hosting and processing providers may retain their standard security and operational logs. Passage-only searches skip both answer services.</p><p>AI answers can be incomplete or mistaken. Verify important claims with the linked original entries. This independent tool uses historical SEP and IEP snapshots and is not an official encyclopedia service.</p></div></dialog></body></html>
