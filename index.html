@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Philosophy — grounded in SEP &amp; IEP</title><link rel="stylesheet" href="./styles.css?v=8264538767d1"><script src="./config.js?v=1afbfc3e20f3"></script><script src="./app.js?v=f1584ebc490a" defer></script></head>
+<body>
+<aside class="sidebar" aria-label="Research library">
+  <a class="brand" href="./" aria-label="Philosophy home"><span class="brand-mark">φ</span><span>philosophy<span class="brand-sub">a place to think</span></span></a>
+  <button id="new-research" class="new-button"><span>＋</span> New inquiry</button>
+  <button id="library-toggle" class="mobile-library" aria-label="Show saved inquiries" aria-expanded="false">☰</button>
+  <div class="library-label">YOUR INQUIRIES <span id="library-count">0</span></div>
+  <nav id="library" aria-label="Saved inquiries"><p class="library-empty">Your saved questions will live here.<br>Return to an idea whenever you like.</p></nav>
+  <div class="sidebar-foot"><span class="live-dot"></span> Online research room<span class="foot-note">Saved to your browser’s library</span></div>
+</aside>
+<main>
+  <header class="topbar"><span>THE PHILOSOPHY RESEARCH ROOM</span><button id="about-button">How it works <span>↗</span></button></header>
+  <section id="welcome" class="welcome">
+    <div class="eyebrow"><span class="tiny-star">✳</span> PHILOSOPHY ENCYCLOPEDIAS · SEP & IEP</div>
+    <h1>Good questions deserve<br><em>thoughtful answers.</em></h1>
+    <p class="intro">Explore an idea, untangle an argument, or see where philosophers disagree. Start with a question. Follow it back to the source.</p>
+  </section>
+  <section class="composer" aria-label="Ask a philosophy question">
+    <form id="ask-form"><div class="corpus-control"><label for="corpus-selection">Read from <select id="corpus-selection"><option value="SEP">Stanford Encyclopedia (SEP)</option><option value="IEP">Internet Encyclopedia (IEP)</option></select></label><span>One encyclopedia per inquiry</span></div>
+      <label for="question" class="sr-only">Your philosophy question</label><textarea id="question" placeholder="What would you like to understand?" maxlength="3000" rows="3" required></textarea>
+      <div class="composer-bottom"><button type="button" id="settings-button" class="quiet-button" aria-expanded="false">⚙ Research settings</button><div class="submit-actions"><button type="button" id="search-button" class="search-button">Find passages</button><button type="submit" id="research-button" class="primary">Explore question <span>↗</span></button></div></div>
+      <div id="settings" class="settings" hidden>
+        <label>Passages to retrieve<input id="rag-count" type="number" min="1" max="300" value="100"></label>
+        <label>Evidence for the answer<select id="selection"><option value="perfect">Perfectly relevant only</option><option value="very" selected>+ Very relevant</option><option value="relevant">+ Relevant</option><option value="number">Custom passage count</option></select></label>
+        <label id="answer-count-label" hidden>Passages for the answer<input id="answer-count" type="number" min="1" max="300" value="20"></label>
+        <label>Answer model<select id="model"><option value="gpt-6.1-sol">GPT-6.1 Sol</option><option value="gpt-6-astra">GPT-6 Astra</option></select></label>
+        <label>Thinking level<select id="effort"><option>low</option><option>medium</option><option>high</option><option>xhigh</option><option>max</option><option>ultra</option></select></label>
+        <p>Rating choices are cumulative. “+ Very relevant” includes Perfectly relevant and Very relevant passages. Custom count takes the best-rated passages, even if their ratings are lower.</p>
+      </div>
+    </form>
+    <p class="composer-note">Answers draw from your selected encyclopedia snapshot. <span>Every claim leads back to a passage.</span></p>
+  </section>
+  <div id="alert" role="alert" hidden></div>
+  <section id="suggestions" class="suggestions"><div class="section-kicker">A FEW PLACES TO BEGIN</div><div class="suggestion-grid">
+    <button data-question="What is the difference between compatibilism and libertarianism about free will?"><span class="suggestion-icon">↗</span><strong>Are we free?</strong><span>Free will, determinism, and the choices we make.</span><span class="suggestion-arrow">↗</span></button>
+    <button data-question="What is the hard problem of consciousness, and why is it different from explaining cognitive functions?"><span class="suggestion-icon">◎</span><strong>What is consciousness?</strong><span>Experience, explanation, and the hard problem.</span><span class="suggestion-arrow">↗</span></button>
+    <button data-question="How does Aristotle understand eudaimonia and its relationship to virtue?"><span class="suggestion-icon">✳</span><strong>What makes a good life?</strong><span>Aristotle, virtue, and human flourishing.</span><span class="suggestion-arrow">↗</span></button>
+  </div></section>
+  <section id="research" hidden aria-label="Research results">
+    <div id="progress" class="progress" aria-live="polite"></div>
+    <div class="result-heading"><h2 id="result-question"></h2><button id="copy-button" class="quiet-button" hidden>Copy answer</button></div>
+    <div id="result-meta" class="result-meta"></div>
+    <div class="tabs" role="tablist" aria-label="Research views"><button id="answer-tab" role="tab" aria-selected="true">Answer</button><button id="passages-tab" role="tab" aria-selected="false">Passages <span id="passage-count"></span></button><button id="method-tab" role="tab" aria-selected="false">Research trail</button></div>
+    <div id="answer-view" class="answer-layout"><article id="answer" class="prose" aria-label="Research answer"></article><aside id="sources" class="source-rail" aria-label="Sources used"></aside></div>
+    <section id="passages-view" hidden><div class="passage-controls"><label for="rating-filter">Show</label><select id="rating-filter"><option value="all">All retrieved passages</option><option value="selected">Used for the answer</option><option value="4">Perfectly relevant</option><option value="3">Very relevant</option><option value="2">Relevant</option><option value="1">A little relevant</option><option value="0">Not relevant</option></select><span id="passage-summary"></span></div><div id="passages"></div></section>
+    <section id="method-view" class="method-view" hidden></section>
+  </section>
+  <footer><span id="corpus-count">Loading the encyclopedia snapshots…</span><span>Independent research tool · SEP & IEP snapshots</span></footer>
+</main>
+<dialog id="source-dialog"><div class="dialog-top"><span>READ THE SOURCE</span><button id="close-source" aria-label="Close source">×</button></div><div id="source-content"></div></dialog>
+<dialog id="about-dialog"><div class="dialog-top"><span>A QUESTION, WITH A TRACEABLE ANSWER</span><button id="close-about" aria-label="Close explanation">×</button></div><h2>From question to understanding.</h2><ol class="about-steps"><li><strong>Find the passages.</strong><p>Your question is compared with the selected encyclopedia’s passage embeddings.</p></li><li><strong>Check relevance.</strong><p>Jev rates each passage against your exact question, from Not relevant to Perfectly relevant.</p></li><li><strong>Choose the evidence.</strong><p>Your rating threshold or custom count decides which passages reach the answer model.</p></li><li><strong>Read, then verify.</strong><p>The answer cites individual passages. Open a citation to read the saved passage, nearby context, and its original encyclopedia link.</p></li></ol><p class="about-note">Find passages stops after retrieval. Explore question also runs Jev and the answer model. Questions and research trails are saved online in your browser’s private library. This is an independent tool, not an official SEP or IEP service.</p></dialog>
+</body></html>
