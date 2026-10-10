@@ -29,7 +29,7 @@
       const response = await fetch(window.PHILOSOPHY_API_URL + '/api/auth/config', {signal: AbortSignal.timeout(10000)});
       if (!response.ok) throw new Error();
       config = await response.json();
-      if (!config.enabled) return;
+      if (!config.url || !config.publishable_key) return;
       if (config.url !== 'https://zajrrynbnitxwxytkpmw.supabase.co' || !config.publishable_key?.startsWith('sb_publishable_')) throw new Error();
       client = new window.PhilosophySupabase.GoTrueClient({
         url: config.url + '/auth/v1', headers: {apikey: config.publishable_key},
@@ -95,7 +95,7 @@
   };
   el('google-signin').addEventListener('click', async () => {
     await ready;
-    if (!client) return;
+    if (!client || !config?.enabled) return;
     el('google-signin').disabled = true;
     message('Opening Google sign-in…');
     try {
