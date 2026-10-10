@@ -41,7 +41,7 @@
     try {
       response = await fetch(API_BASE + path, {method: body ? 'POST' : 'GET', headers, ...(body ? {body: JSON.stringify(body)} : {}), signal: AbortSignal.timeout(20000)});
     } catch {
-      throw new Error('The connection was interrupted. Your inquiry may still be running; check your saved inquiries before starting again.');
+      throw new Error(body ? 'The connection was interrupted. Your inquiry may still be running; check your saved inquiries before starting again.' : 'The connection was interrupted. Reopen this saved item to try again.');
     }
     const isJSON = response.headers.get('Content-Type')?.includes('application/json');
     const result = isJSON ? await response.json() : {};
