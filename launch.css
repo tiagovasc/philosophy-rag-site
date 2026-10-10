@@ -35,3 +35,12 @@ button[aria-busy="true"]{cursor:progress}
 .honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 @media(max-width:760px){.welcome{padding-top:30px}.composer textarea{font-size:16px;padding:18px 16px}.allowance-row{padding:0 16px 14px;font-size:10px;align-items:start}.allowance-hint{font-size:10px}.settings{grid-template-columns:1fr}.source-rail{position:static}.result-actions{gap:3px}.result-heading{flex-wrap:wrap}.result-heading h2{margin-bottom:4px}.prose{font-size:15px}.composer-note{line-height:1.7}.primary,.search-button{min-height:42px}.sidebar.mobile-open nav{max-height:320px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+/* Optional account controls share the quiet, paper-like research-room style. */
+.topbar.topbar{height:auto;min-height:72px;padding:14px 0;box-sizing:border-box}
+.topbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap}
+.topbar #google-signin{border:1px solid #c9becd;border-radius:8px;padding:8px 12px;background:#fff;color:#574365;font-size:12px;white-space:nowrap}
+.account-label{color:#756b79;font-size:11px;letter-spacing:0;max-width:240px;overflow-wrap:anywhere}
+.auth-note{margin:0 0 20px;color:#756b79;font-size:12px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.auth-note label{display:flex;align-items:center;gap:7px}.auth-note input{accent-color:#6d5279}
+#auth-message:empty{display:none}.topbar button:disabled{opacity:.55;cursor:wait}
+@media(max-width:650px){.topbar{align-items:flex-start;gap:12px;flex-direction:column}.topbar-actions{justify-content:flex-start;gap:8px 12px}.account-label{max-width:260px}.auth-note{font-size:11px;line-height:1.6;margin-bottom:14px}.topbar #google-signin{font-size:11px}}

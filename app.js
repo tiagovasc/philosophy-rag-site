@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 let current = null, polling = null, busy = false, tab = 'answer';
 const nodes = (tag, text, cls) => { const n=document.createElement(tag); if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n; };
 async function api(path, body) {
-  const response=await fetch(API_BASE+path,{method:body?'POST':'GET',headers:{'X-Research-Owner':libraryToken,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+  const response=await fetch(API_BASE+path,{method:body?'POST':'GET',headers:{'X-Research-Owner':libraryToken,...await window.PhilosophyAuth.headers(),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
   const result=await response.json();
   if(!response.ok)throw new Error(result.error||'Something went wrong. Please try again.');
   return result;
@@ -43,10 +43,12 @@ async function load(id) {
   }catch(e){setBusy(false);alertMessage(e.message);}
 }
 async function loadLibrary() {
+  const identityVersion = window.PHILOSOPHY_IDENTITY_VERSION || 0;
   try {
     const {queries}=await api('/api/library');
+    if(identityVersion !== (window.PHILOSOPHY_IDENTITY_VERSION || 0))return;
     $('library-count').textContent=queries.length;
-    if(!queries.length)return;
+    if(!queries.length){$('library').replaceChildren(nodes('p','Your saved inquiries will appear here.','library-empty'));return;}
     $('library').replaceChildren();
     queries.forEach(q=>{
       const b=nodes('button',undefined,'library-item'+(current?.id===q.id?' active':''));

@@ -25,11 +25,11 @@
   }
 
   api = async function(path, body) {
-    const headers = {'X-Research-Owner': libraryToken};
+    const headers = {'X-Research-Owner': libraryToken, ...await window.PhilosophyAuth.headers()};
     if (body) {
       body = {...body, model: 'gpt-6.1-sol', effort: 'low', website: $('website-check').value};
       const bytes = new TextEncoder().encode(JSON.stringify(body));
-      const key = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), n => n.toString(16).padStart(2, '0')).join('');
+      const key = (window.PhilosophyAuth.signedIn() ? 'account:' : 'guest:') + Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), n => n.toString(16).padStart(2, '0')).join('');
       if (!lastRequest || lastRequest.key !== key || Date.now() - lastRequest.at > 600000) {
         lastRequest = {key, id: crypto.randomUUID().replaceAll('-', ''), at: Date.now()};
         localStorage.setItem('philosophy-pending-submission', JSON.stringify(lastRequest));
@@ -157,6 +157,28 @@
   });
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) refreshAllowance();
+  });
+  window.addEventListener('philosophy-account-change', () => {
+    // Account changes invalidate in-flight reads and remove private rendered content.
+    ++loadVersion;
+    window.PHILOSOPHY_IDENTITY_VERSION = (window.PHILOSOPHY_IDENTITY_VERSION || 0) + 1;
+    libraryToken = localStorage.getItem('philosophy-library') || libraryToken;
+    clearTimeout(polling);
+    current = null;
+    setBusy(false);
+    $('research').hidden = true;
+    $('welcome').hidden = false;
+    $('suggestions').hidden = false;
+    $('question').value = '';
+    $('source-dialog').close();
+    $('source-content').replaceChildren();
+    $('library').replaceChildren();
+    ['answer', 'passages', 'method-view', 'sources', 'result-question'].forEach(id => $(id).replaceChildren());
+    localStorage.removeItem('philosophy-last-inquiry');
+    localStorage.removeItem('philosophy-pending-submission');
+    lastRequest = null;
+    loadLibrary();
+    refreshAllowance();
   });
   refreshAllowance();
   // Loading a saved inquiry never starts a new provider request.
